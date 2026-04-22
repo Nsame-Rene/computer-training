@@ -1,5 +1,6 @@
 import { getIronSession, IronSession } from "iron-session";
 import { cookies } from "next/headers";
+import { isCeoRole } from "@/lib/roles";
 
 /* -------------------- TYPES -------------------- */
 
@@ -59,7 +60,7 @@ export async function requireAuth(): Promise<IronSession<SessionData>> {
 export async function requireCEO(): Promise<IronSession<SessionData>> {
   const session = await requireAuth();
 
-  if (session.role !== "ceo") {
+  if (!isCeoRole(session.role)) {
     throw new Error("Unauthorized - CEO only");
   }
 
