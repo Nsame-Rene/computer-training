@@ -1,7 +1,7 @@
 # EduManage — School Management System
-### Next.js 14 + SQLite (Prisma) — No Firebase
+### Next.js 14 + Supabase Postgres (Prisma) — No Firebase
 
-A complete full-stack school management platform. **Frontend and backend both run in Next.js.** Database is SQLite — no external services needed.
+A complete full-stack school management platform. **Frontend and backend both run in Next.js.** Database is Supabase Postgres via Prisma.
 
 ---
 
@@ -13,16 +13,23 @@ cd school-management
 npm install
 ```
 
-### 2. Set up the database
+### 2. Configure environment variables
 ```bash
-# Push the schema to SQLite (creates prisma/dev.db automatically)
-npx prisma db push
+# Update .env with your Supabase connection strings:
+# DATABASE_URL=... (pooler/runtime)
+# DIRECT_URL=...   (direct connection for Prisma migrate)
+```
+
+### 3. Set up the database
+```bash
+# Create and apply migrations (creates all tables + relationships)
+npx prisma migrate dev --name init
 
 # Seed with sample data and demo users
 npx tsx src/db/seed.ts
 ```
 
-### 3. Run the development server
+### 4. Run the development server
 ```bash
 npm run dev
 ```
@@ -46,8 +53,7 @@ Open **http://localhost:3000**
 ```
 school-management/
 ├── prisma/
-│   ├── schema.prisma        ← Database schema (SQLite)
-│   └── dev.db               ← SQLite database file (auto-created)
+│   └── schema.prisma        ← Database schema (Supabase Postgres)
 ├── src/
 │   ├── app/
 │   │   ├── api/             ← All backend API routes
@@ -92,16 +98,31 @@ school-management/
 
 ## 🗄️ Database
 
-SQLite via **Prisma ORM**. The database file lives at `prisma/dev.db`.
+Supabase Postgres via **Prisma ORM**.
 
 **To view/edit data in a GUI:**
 ```bash
 npx prisma studio
 ```
 
-**To reset and reseed:**
+**To create all tables and relationships from schema (Supabase/Postgres):**
 ```bash
-npx prisma db push --force-reset
+npx prisma migrate dev --name init
+```
+
+**Production migration command:**
+```bash
+npx prisma migrate deploy
+```
+
+**Alternative schema sync (without migration files):**
+```bash
+npx prisma db push
+```
+
+**To reset and reseed (development only):**
+```bash
+npx prisma migrate reset
 npx tsx src/db/seed.ts
 ```
 
@@ -149,7 +170,9 @@ npm run dev          # Start development server
 npm run build        # Build for production
 npm run start        # Start production server
 npx prisma studio    # Open database GUI
-npx prisma db push   # Sync schema to database
+npx prisma migrate dev --name init # Create tables + relationships
+npx prisma migrate deploy # Run migrations (production)
+npx prisma db push   # Sync schema to database (no migration files)
 npx tsx src/db/seed.ts  # Reseed database
 ```
 
@@ -162,7 +185,7 @@ npx tsx src/db/seed.ts  # Reseed database
 | Framework | Next.js 14 (App Router) |
 | Language | TypeScript |
 | Styling | Tailwind CSS + shadcn/ui |
-| Database | SQLite via Prisma ORM |
+| Database | Supabase Postgres via Prisma ORM |
 | Auth | iron-session (cookie sessions) |
 | Password | bcryptjs |
 | Charts | Recharts |

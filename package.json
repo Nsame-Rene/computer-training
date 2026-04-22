@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev --name init",
+    "db:deploy": "prisma migrate deploy",
     "db:studio": "prisma studio",
     "db:seed": "tsx src/db/seed.ts"
   },

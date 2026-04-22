@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Globe2, Award, Users, Sparkles } from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import { isMissingTableError } from "@/lib/prisma-errors";
 
 const defaultAbout = {
   vision: "To become the leading school management platform in the region by delivering accessible, trusted, and technology-driven learning experiences to every student.",
@@ -14,13 +15,23 @@ const defaultAbout = {
 };
 
 export default async function AboutUsPage() {
-  const aboutUs = await prisma.aboutUs.findFirst();
-  const gallery = await prisma.gallery.findMany({ orderBy: { createdAt: "desc" } });
-  const staff = await prisma.teacher.findMany({
-    where: {},
-    include: { user: { select: { firstName: true, lastName: true, phone: true } } },
-    orderBy: { joinDate: "desc" },
-  });
+  let aboutUs: Awaited<ReturnType<typeof prisma.aboutUs.findFirst>> = null;
+  let gallery: Awaited<ReturnType<typeof prisma.gallery.findMany>> = [];
+  let staff: Awaited<ReturnType<typeof prisma.teacher.findMany>> = [];
+
+  try {
+    [aboutUs, gallery, staff] = await Promise.all([
+      prisma.aboutUs.findFirst(),
+      prisma.gallery.findMany({ orderBy: { createdAt: "desc" } }),
+      prisma.teacher.findMany({
+        where: {},
+        include: { user: { select: { firstName: true, lastName: true, phone: true } } },
+        orderBy: { joinDate: "desc" },
+      }),
+    ]);
+  } catch (error) {
+    if (!isMissingTableError(error)) throw error;
+  }
 
   const pageAbout = {
     vision: aboutUs?.vision ?? defaultAbout.vision,

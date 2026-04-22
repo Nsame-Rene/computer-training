@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Clock, DollarSign, BookOpen, ArrowRight } from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import { isMissingTableError } from "@/lib/prisma-errors";
 
 interface Program {
   id: string;
@@ -19,7 +20,12 @@ interface Program {
 }
 
 async function getPrograms() {
-  return await prisma.program.findMany({ orderBy: { title: "asc" } });
+  try {
+    return await prisma.program.findMany({ orderBy: { title: "asc" } });
+  } catch (error) {
+    if (isMissingTableError(error)) return [];
+    throw error;
+  }
 }
 
 export default async function ProgramsPage() {
@@ -105,7 +111,7 @@ export default async function ProgramsPage() {
                         <Link href={`/programs/${program.slug}`}>View Details</Link>
                       </Button>
                       <Button className="w-full sm:w-auto mt-4" asChild>
-                        <Link href={`/enroll?program=${program.id}`}>
+                        <Link href={`/enroll?program=${program.slug}`}>
                           Apply Now <ArrowRight className="ml-2 h-4 w-4" />
                         </Link>
                       </Button>

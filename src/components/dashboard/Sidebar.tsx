@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
+import { normalizeRole } from "@/lib/roles";
 import { GraduationCap, LogOut, ChevronLeft, ChevronRight, LayoutDashboard, Users, BookOpen,
   ClipboardList, DollarSign, Image, MessageSquare, Settings, Bell, FileText, BarChart2,
   Briefcase, Award, Globe, UserCircle, Brain, ClipboardCheck, BookMarked, Megaphone, CreditCard, Clock } from "lucide-react";
@@ -66,7 +67,8 @@ export function DashboardSidebar({ onClose }: { onClose?: () => void }) {
   const { user, logout } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
 
-  const nav = user?.role === "ceo" ? ceoNav : user?.role === "teacher" ? teacherNav : studentNav;
+  const normalizedRole = normalizeRole(user?.role);
+  const nav = normalizedRole === "ceo" ? ceoNav : normalizedRole === "teacher" ? teacherNav : studentNav;
 
   async function handleLogout() {
     await logout();
@@ -90,7 +92,7 @@ export function DashboardSidebar({ onClose }: { onClose?: () => void }) {
       {!collapsed && user && (
         <div className="px-4 py-3 border-b border-gray-700">
           <p className="font-semibold text-sm truncate">{user.firstName} {user.lastName}</p>
-          <p className="text-xs text-gray-400 capitalize">{user.role}</p>
+          <p className="text-xs text-gray-400 capitalize">{normalizedRole}</p>
         </div>
       )}
 

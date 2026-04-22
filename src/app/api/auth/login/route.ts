@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
+import { normalizeRole } from "@/lib/roles";
+import { getDbInitHelpMessage, isMissingTableError } from "@/lib/prisma-errors";
 
 export async function POST(req: NextRequest) {
   try {
@@ -62,8 +64,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const normalizedRole = normalizeRole(user.role);
+
     if (
-      (user.role === "student" || user.role === "teacher") &&
+      (normalizedRole === "student" || normalizedRole === "teacher") &&
       !user.isActivated
     ) {
       return NextResponse.json(
@@ -81,14 +85,14 @@ export async function POST(req: NextRequest) {
     let teacherId: number | undefined;
     let studentId: number | undefined;
 
-    if (user.role === "teacher") {
+    if (normalizedRole === "teacher") {
       const teacher = await prisma.teacher.findUnique({
         where: { userId: user.id },
       });
       teacherId = teacher?.id;
     }
 
-    if (user.role === "student") {
+    if (normalizedRole === "student") {
       const student = await prisma.student.findUnique({
         where: { userId: user.id },
       });
@@ -108,14 +112,14 @@ export async function POST(req: NextRequest) {
       (user.email || user.matricule || user.id.toString()) as string;
     session.firstName = user.firstName || "";
     session.lastName = user.lastName || "";
-    session.role = user.role as "ceo" | "teacher" | "student";
+    session.role = normalizedRole;
     session.teacherId = teacherId;
     session.studentId = studentId;
 
     await session.save();
 
     console.log(
-      `[LOGIN] User logged in: ${user.email}, Role: ${user.role}`
+      `[LOGIN] User logged in: ${user.email}, Role: ${normalizedRole}`
     );
 
     /* -------------------- RESPONSE -------------------- */
@@ -126,12 +130,18 @@ export async function POST(req: NextRequest) {
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
-        role: user.role,
+        role: normalizedRole,
         teacherId,
         studentId,
       },
     });
   } catch (error) {
+    if (isMissingTableError(error)) {
+      return NextResponse.json(
+        { error: getDbInitHelpMessage() },
+        { status: 503 }
+      );
+    }
     console.error("Login error:", error);
     return NextResponse.json(
       { error: "Internal server error" },

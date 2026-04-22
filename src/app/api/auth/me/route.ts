@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
+import { normalizeRole } from "@/lib/roles";
 
 export async function GET() {
   const session = await getSession();
@@ -29,12 +30,14 @@ export async function GET() {
   let teacherId: number | undefined;
   let studentId: number | undefined;
 
-  if (user.role === "teacher") {
+  const normalizedRole = normalizeRole(user.role);
+
+  if (normalizedRole === "teacher") {
     const teacher = await prisma.teacher.findUnique({
       where: { userId: user.id },
     });
     teacherId = teacher?.id;
-  } else if (user.role === "student") {
+  } else if (normalizedRole === "student") {
     const student = await prisma.student.findUnique({
       where: { userId: user.id },
     });
@@ -44,6 +47,7 @@ export async function GET() {
   return NextResponse.json({
     user: {
       ...user,
+      role: normalizedRole,
       teacherId,
       studentId,
     },

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ShieldCheck, Briefcase, HeartHandshake, Rocket, ArrowRight } from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import { isMissingTableError } from "@/lib/prisma-errors";
 
 const iconMap: Record<string, any> = {
   ShieldCheck,
@@ -20,10 +21,15 @@ const defaultServices = [
 ];
 
 export default async function ServicesPage() {
-  const dbServices = await prisma.service.findMany({
-    where: { isActive: true },
-    orderBy: { createdAt: "desc" },
-  });
+  let dbServices: Awaited<ReturnType<typeof prisma.service.findMany>> = [];
+  try {
+    dbServices = await prisma.service.findMany({
+      where: { isActive: true },
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (error) {
+    if (!isMissingTableError(error)) throw error;
+  }
 
   const services = dbServices.length > 0
     ? dbServices.map((s) => ({

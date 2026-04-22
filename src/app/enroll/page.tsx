@@ -60,7 +60,7 @@ function EnrollForm() {
         }),
       fetch("/api/programs")
         .then((r) => r.json())
-        .then(setPrograms)
+        .then((data) => setPrograms(Array.isArray(data) ? data : []))
         .finally(() => setLoadingPrograms(false))
         .catch(() => setLoadingPrograms(false)),
     ]);

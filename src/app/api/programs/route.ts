@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
+import { getDbInitHelpMessage, isMissingTableError } from "@/lib/prisma-errors";
 
 // GET: Fetch all programs
 export async function GET() {
@@ -11,6 +12,9 @@ export async function GET() {
 
     return NextResponse.json(programs);
   } catch (error) {
+    if (isMissingTableError(error)) {
+      return NextResponse.json([]);
+    }
     return NextResponse.json(
       { error: "Failed to fetch programs" },
       { status: 500 }
@@ -48,6 +52,12 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(program, { status: 201 });
   } catch (error) {
+    if (isMissingTableError(error)) {
+      return NextResponse.json(
+        { error: getDbInitHelpMessage() },
+        { status: 503 }
+      );
+    }
     return NextResponse.json(
       { error: "Failed to create program" },
       { status: 500 }
