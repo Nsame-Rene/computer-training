@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}AI Assistant | ELIGNITE{% endblock %}
+{% block content %}
+<section class="card">
+  <h1>ELIGNITE AI Assistant (Offline)</h1>
+  <p>This assistant uses your internal knowledge database only. No API key required.</p>
+  <p><strong>Knowledge articles available:</strong> {{ knowledge_count }}</p>
+</section>
+
+<section class="card form-card">
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn" type="submit">Ask Assistant</button>
+  </form>
+</section>
+
+{% if response_text %}
+<section class="card">
+  <h3>Assistant Response</h3>
+  <pre style="white-space: pre-wrap; font-family: inherit;">{{ response_text }}</pre>
+
+  {% if matched_entries %}
+  <h4>Matched Knowledge</h4>
+  <ul>
+    {% for item in matched_entries %}
+    <li><strong>{{ item.title }}</strong> — {{ item.question }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</section>
+{% endif %}
+{% endblock %}

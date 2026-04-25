@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Student Dashboard</h1>
+<div class="grid">
+  <section class="card"><h3>Enrolled Programs</h3>{% for p in programs %}<p>{{ p.name }}</p>{% empty %}<p>None</p>{% endfor %}</section>
+  <section class="card"><h3>Attendance History</h3>{% for a in attendance %}<p>{{ a.date }} - {% if a.present %}Present{% else %}Absent{% endif %}</p>{% empty %}<p>No records.</p>{% endfor %}</section>
+  <section class="card"><h3>Exercise Scores</h3>{% for r in exercise_results %}<p>{{ r.exercise.name }}: {{ r.score }}</p>{% empty %}<p>None</p>{% endfor %}</section>
+  <section class="card"><h3>Project Scores</h3>{% for r in project_results %}<p>{{ r.project.name }}: {{ r.score }}</p>{% empty %}<p>None</p>{% endfor %}</section>
+  <section class="card"><h3>Payments</h3>{% for pay in payments %}<p>{{ pay.program.name }} - {{ pay.amount }} - {% if pay.paid %}Paid{% else %}Unpaid{% endif %}</p>{% empty %}<p>No payments.</p>{% endfor %}</section>
+</div>
+<div class="card form-card">
+  <h3>Submit Testimonial</h3>
+  <form method="post" action="{% url 'submit_testimonial' %}">{% csrf_token %}{{ testimonial_form.as_p }}<button class="btn" type="submit">Send</button></form>
+</div>
+{% endblock %}

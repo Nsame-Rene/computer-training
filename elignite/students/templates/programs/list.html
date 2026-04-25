@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Available Programs</h1>
+<div class="grid">
+{% for program in programs %}
+  <article class="card">
+    <h3>{{ program.name }}</h3>
+    <p>{{ program.duration }} · {{ program.location }}</p>
+    <p>${{ program.price }}</p>
+    <a href="{{ program.get_absolute_url }}">Open</a>
+  </article>
+{% endfor %}
+</div>
+{% endblock %}

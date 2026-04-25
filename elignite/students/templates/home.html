@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Home | ELIGNITE{% endblock %}
+{% block content %}
+<section class="hero card">
+  <h1>Modern School Management, Built for Growth</h1>
+  <p>ELIGNITE unifies enrollment, academic operations, attendance, payments, and testimonials in one streamlined SaaS platform.</p>
+</section>
+<section>
+  <h2>Programs</h2>
+  <div class="grid">{% for program in programs %}<article class="card"><h3>{{ program.name }}</h3><p>{{ program.description|truncatechars:120 }}</p><a href="{{ program.get_absolute_url }}">View details</a></article>{% endfor %}</div>
+</section>
+<section>
+  <h2>Testimonials</h2>
+  <div class="grid">{% for t in testimonials %}<article class="card"><strong>{{ t.user.get_full_name }}</strong><p>{{ t.text|truncatechars:110 }}</p><small>Rating: {{ t.rating }}/5</small></article>{% empty %}<p>No testimonials yet.</p>{% endfor %}</div>
+</section>
+{% endblock %}
