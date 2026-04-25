@@ -6,6 +6,7 @@ from .views import (
     MatriculeLoginView,
     ProgramDetailView,
     ProgramListView,
+    ai_assistant,
     about_page,
     attendance_stats,
     create_exercise,
@@ -38,6 +39,7 @@ urlpatterns = [
     path('dashboard/teacher/attendance/create/', mark_attendance, name='mark_attendance'),
     path('dashboard/student/testimonial/', submit_testimonial, name='submit_testimonial'),
     path('dashboard/attendance-stats/', attendance_stats, name='attendance_stats'),
+    path('assistant/', ai_assistant, name='ai_assistant'),
     path('services/', services_page, name='services'),
     path('about/', about_page, name='about'),
 ]

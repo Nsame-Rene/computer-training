@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .models import (
+    AIAssistantKnowledge,
     Attendance,
     Enrollment,
     Exercise,
@@ -37,6 +38,13 @@ class ProgramAdmin(admin.ModelAdmin):
 class EnrollmentAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'program', 'status', 'matricule', 'created_at')
     list_filter = ('status', 'program')
+
+
+@admin.register(AIAssistantKnowledge)
+class AIAssistantKnowledgeAdmin(admin.ModelAdmin):
+    list_display = ('title', 'role_target', 'priority', 'is_active', 'updated_at')
+    list_filter = ('role_target', 'is_active')
+    search_fields = ('title', 'question', 'keywords', 'answer')
 
 
 admin.site.register([SystemSetting, StudentProgram, Exercise, Project, ExerciseResult, ProjectResult, Attendance, Payment, Testimonial, SiteContent])

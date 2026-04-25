@@ -190,3 +190,38 @@ class SiteContent(models.Model):
 
     def __str__(self):
         return 'Site Content'
+
+
+class AIAssistantKnowledge(models.Model):
+    ROLE_ALL = 'ALL'
+    ROLE_ADMIN = User.ROLE_ADMIN
+    ROLE_TEACHER = User.ROLE_TEACHER
+    ROLE_STUDENT = User.ROLE_STUDENT
+
+    ROLE_CHOICES = (
+        (ROLE_ALL, 'All Users'),
+        (ROLE_ADMIN, 'Admin'),
+        (ROLE_TEACHER, 'Teacher'),
+        (ROLE_STUDENT, 'Student'),
+    )
+
+    title = models.CharField(max_length=120)
+    question = models.CharField(max_length=255)
+    keywords = models.CharField(
+        max_length=255,
+        help_text='Comma-separated words used by the local assistant to match requests.',
+    )
+    answer = models.TextField(help_text='Detailed local answer stored in DB (no API key required).')
+    role_target = models.CharField(max_length=3, choices=ROLE_CHOICES, default=ROLE_ALL)
+    priority = models.PositiveIntegerField(default=1)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-priority', 'title']
+        verbose_name = 'AI Assistant Knowledge'
+        verbose_name_plural = 'AI Assistant Knowledge'
+
+    def __str__(self):
+        return f'{self.title} ({self.role_target})'

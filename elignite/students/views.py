@@ -1,18 +1,25 @@
 from io import BytesIO
 
 from django.contrib import messages
-from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.views import LoginView
 from django.db.models import Count, Q
 from django.http import FileResponse, Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.utils import timezone
 from django.views.generic import CreateView, DetailView, ListView
 
-from .forms import AttendanceForm, EnrollmentForm, ExerciseForm, MatriculeLoginForm, ProjectForm, TestimonialForm
+from .forms import (
+    AIAssistantQueryForm,
+    AttendanceForm,
+    EnrollmentForm,
+    ExerciseForm,
+    MatriculeLoginForm,
+    ProjectForm,
+    TestimonialForm,
+)
 from .models import (
+    AIAssistantKnowledge,
     Attendance,
     Enrollment,
     Exercise,
@@ -27,6 +34,7 @@ from .models import (
     Testimonial,
     User,
 )
+from .services import answer_with_local_knowledge
 
 try:
     from reportlab.lib.pagesizes import A4
@@ -267,3 +275,25 @@ def attendance_stats(request):
         absent_count=Count('id', filter=Q(present=False)),
     )
     return render(request, 'dashboard/attendance_stats.html', {'stats': stats})
+
+
+@login_required
+def ai_assistant(request):
+    form = AIAssistantQueryForm(request.POST or None)
+    response_text = ''
+    matched_entries = []
+
+    if request.method == 'POST' and form.is_valid():
+        user_query = form.cleaned_data['query']
+        assistant_response = answer_with_local_knowledge(user_query, request.user)
+        response_text = assistant_response.answer
+        matched_entries = assistant_response.matches
+
+    knowledge_count = AIAssistantKnowledge.objects.filter(is_active=True).count()
+    context = {
+        'form': form,
+        'response_text': response_text,
+        'matched_entries': matched_entries,
+        'knowledge_count': knowledge_count,
+    }
+    return render(request, 'dashboard/ai_assistant.html', context)

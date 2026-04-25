@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 
-from .models import Attendance, Enrollment, Exercise, Payment, Program, Project, Testimonial, User
+from .models import AIAssistantKnowledge, Attendance, Enrollment, Exercise, Payment, Program, Project, Testimonial, User
 
 
 class MatriculeLoginForm(AuthenticationForm):
@@ -54,3 +54,16 @@ class UserApprovalForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['is_approved', 'is_active', 'role']
+
+
+class AIAssistantQueryForm(forms.Form):
+    query = forms.CharField(
+        label='Ask ELIGNITE Assistant',
+        widget=forms.Textarea(attrs={'rows': 4, 'placeholder': 'Example: How do I submit testimonials?'}),
+    )
+
+
+class AIAssistantKnowledgeForm(forms.ModelForm):
+    class Meta:
+        model = AIAssistantKnowledge
+        fields = ['title', 'question', 'keywords', 'answer', 'role_target', 'priority', 'is_active']

@@ -22,6 +22,10 @@ Production-ready school management system built with Django templates.
    ```bash
    python manage.py runserver
    ```
+6. Seed local AI Assistant knowledge database (optional but recommended):
+   ```bash
+   python manage.py seed_ai_knowledge
+   ```
 
 ## Main modules
 - Custom user model with role-based access (Admin/Teacher/Student).
@@ -30,6 +34,7 @@ Production-ready school management system built with Django templates.
 - Attendance, exercises, projects, payments, testimonials.
 - Services/About CMS blocks.
 - Enrollment PDF export including CEO signature.
+- Offline AI Assistant powered by internal database content (no API key).
 
 ## Required settings
 - `AUTH_USER_MODEL = 'students.User'`
