@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Attendance Statistics</h1>
+<div class="grid">{% for row in stats %}<div class="card"><h3>{{ row.program__name }}</h3><p>Present: {{ row.present_count }}</p><p>Absent: {{ row.absent_count }}</p></div>{% endfor %}</div>
+{% endblock %}

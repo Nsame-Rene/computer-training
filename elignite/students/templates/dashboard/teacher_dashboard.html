@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Teacher Dashboard</h1>
+<div class="grid">
+  <section class="card"><h3>Assigned Programs</h3>{% for p in assigned_programs %}<p>{{ p.name }}</p>{% empty %}<p>No assignments.</p>{% endfor %}</section>
+  <section class="card"><h3>Create Exercise</h3><form method="post" action="{% url 'create_exercise' %}">{% csrf_token %}{{ exercise_form.as_p }}<button class="btn" type="submit">Create</button></form></section>
+  <section class="card"><h3>Create Project</h3><form method="post" action="{% url 'create_project' %}">{% csrf_token %}{{ project_form.as_p }}<button class="btn" type="submit">Create</button></form></section>
+  <section class="card"><h3>Mark Attendance</h3><form method="post" action="{% url 'mark_attendance' %}">{% csrf_token %}{{ attendance_form.as_p }}<button class="btn" type="submit">Save</button></form></section>
+</div>
+<section class="card"><h3>Student Performance</h3>{% for perf in student_performance %}<p>{{ perf.student.get_full_name }} · {{ perf.exercise.program.name }} · {{ perf.score }}</p>{% empty %}<p>No performance data.</p>{% endfor %}</section>
+{% endblock %}

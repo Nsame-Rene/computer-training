@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="card"><h1>About ELIGNITE</h1><h3>Vision</h3><p>{{ content.about_vision_text|default:'Empower learners with practical, career-ready education.' }}</p><h3>Mission</h3><p>{{ content.about_mission_text|default:'Build a data-driven and student-centric learning system.' }}</p></section>
+<section><h2>Staff</h2><div class="grid">{% for t in teachers %}<article class="card"><h4>{{ t.get_full_name }}</h4><p>{{ t.email }}</p></article>{% empty %}<p>No staff configured.</p>{% endfor %}</div></section>
+{% endblock %}

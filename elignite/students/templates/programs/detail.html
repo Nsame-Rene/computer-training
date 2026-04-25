@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<article class="card">
+  <h1>{{ program.name }}</h1>
+  <p>{{ program.description }}</p>
+  <p><strong>Who this is for:</strong> {{ program.who_is_for }}</p>
+  <p><strong>Instructor:</strong> {{ program.instructor.get_full_name|default:'TBA' }}</p>
+  <p><strong>Students:</strong> {{ student_count }}</p>
+</article>
+<section>
+  <h2>Testimonials</h2>
+  {% for t in testimonials %}<div class="card"><p>{{ t.text }}</p><small>{{ t.user.get_full_name }} - {{ t.rating }}/5</small></div>{% empty %}<p>No testimonials yet.</p>{% endfor %}
+</section>
+{% endblock %}
