@@ -3,7 +3,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, DollarSign, BookOpen, ArrowRight } from "lucide-react";
+import { Clock, DollarSign, BookOpen, ArrowRight, Share2 } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 
 interface Program {
@@ -30,10 +30,10 @@ export default async function ProgramsPage() {
       <Navbar />
 
       {/* Header */}
-      <section className="bg-gradient-to-r from-blue-800 to-blue-600 text-white py-12 px-4">
+      <section className="bg-white text-slate-950 border-b border-slate-200 py-12 px-4">
         <div className="max-w-6xl mx-auto text-center">
           <h1 className="text-4xl font-bold mb-4">Our Programs</h1>
-          <p className="text-blue-100 text-lg max-w-2xl mx-auto">
+          <p className="text-slate-600 text-lg max-w-2xl mx-auto">
             Explore our comprehensive range of accredited programs designed to prepare you for success in your chosen field.
           </p>
         </div>
@@ -49,7 +49,7 @@ export default async function ProgramsPage() {
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {programs.map((program) => (
-                <Card key={program.id} className="shadow-lg hover:shadow-xl transition-shadow flex flex-col">
+                <Card key={program.id} className="border border-slate-200 shadow-sm hover:shadow-md transition-shadow flex flex-col">
                   <CardHeader>
                     <div className="flex items-start justify-between gap-2 mb-2">
                       <CardTitle className="text-xl text-gray-900">
@@ -103,6 +103,11 @@ export default async function ProgramsPage() {
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                       <Button className="w-full sm:w-auto mt-4" variant="outline" asChild>
                         <Link href={`/programs/${program.slug}`}>View Details</Link>
+                      </Button>
+                      <Button className="w-full sm:w-auto mt-4" variant="outline" asChild>
+                        <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`/programs/${program.slug}`)}`} target="_blank" rel="noreferrer">
+                          <Share2 className="mr-2 h-4 w-4" /> Share
+                        </a>
                       </Button>
                       <Button className="w-full sm:w-auto mt-4" asChild>
                         <Link href={`/enroll?program=${program.id}`}>

@@ -6,7 +6,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Search, Loader2 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 export default function TeacherStudentsPage() {
-  const { teacherId } = useAuth();
+  const { user } = useAuth();
+  const teacherId = user?.teacherId;
   const [students, setStudents] = useState<{id:number;studentId:string;firstName:string;lastName:string;email:string;level:number;status:string}[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);

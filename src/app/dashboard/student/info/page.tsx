@@ -16,19 +16,18 @@ export default function StudentInfoPage() {
             </div>
             <div><h2 className="text-xl font-bold">{user?.firstName} {user?.lastName}</h2><p className="text-gray-500">{user?.email}</p><Badge className="mt-1 capitalize">{user?.role}</Badge></div>
           </div>
-          {[
-            {icon:GraduationCap,label:"Program",value:"BSc Computer Science"},
-            {icon:GraduationCap,label:"Level",value:"200 Level · Semester 1"},
-            {icon:Calendar,label:"Academic Year",value:"2024/2025"},
-            {icon:Calendar,label:"Enrolled",value:"September 1, 2023"},
-            {icon:Calendar,label:"Expected Graduation",value:"June 2027"},
-            {icon:MapPin,label:"Campus",value:"Main Campus, Bamenda"},
-          ].map(item=>(
-            <div key={item.label} className="flex items-start gap-3">
-              <item.icon className="h-4 w-4 text-gray-400 mt-0.5"/>
-              <div><p className="text-xs text-gray-400">{item.label}</p><p className="text-sm font-medium">{item.value}</p></div>
-            </div>
-          ))}
+          <div className="flex items-start gap-3">
+            <GraduationCap className="h-4 w-4 text-gray-400 mt-0.5"/>
+            <div><p className="text-xs text-gray-400">Program</p><p className="text-sm font-medium">No program information has been published yet.</p></div>
+          </div>
+          <div className="flex items-start gap-3">
+            <Calendar className="h-4 w-4 text-gray-400 mt-0.5"/>
+            <div><p className="text-xs text-gray-400">Academic Records</p><p className="text-sm font-medium">No academic timeline has been published yet.</p></div>
+          </div>
+          <div className="flex items-start gap-3">
+            <MapPin className="h-4 w-4 text-gray-400 mt-0.5"/>
+            <div><p className="text-xs text-gray-400">Campus</p><p className="text-sm font-medium">No campus information has been published yet.</p></div>
+          </div>
         </CardContent>
       </Card>
     </div>

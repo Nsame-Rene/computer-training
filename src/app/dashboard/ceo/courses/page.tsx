@@ -160,7 +160,7 @@ export default function CeoCoursesPage() {
                   <Input
                     value={form.code}
                     onChange={(e) => setForm((f) => ({ ...f, code: e.target.value }))}
-                    placeholder="e.g., CS101"
+                    placeholder="Course code"
                     required
                   />
                 </div>
@@ -169,7 +169,7 @@ export default function CeoCoursesPage() {
                   <Input
                     value={form.title}
                     onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
-                    placeholder="e.g., Intro to Programming"
+                    placeholder="Course title"
                     required
                   />
                 </div>
