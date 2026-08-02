@@ -111,7 +111,7 @@ export default async function ProgramDetailsPage({ params }: { params: { slug: s
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-gray-900">Instructor</p>
-                    <p className="mt-2 text-sm text-gray-600">{instructor ? `${instructor.firstName} ${instructor.lastName}` : "TBA"}</p>
+                    <p className="mt-2 text-sm text-gray-600">{instructor ? `${instructor.firstName ?? ""} ${instructor.lastName ?? ""}`.trim() || "TBA" : "TBA"}</p>
                   </div>
                 </div>
               </CardContent>
@@ -127,18 +127,18 @@ export default async function ProgramDetailsPage({ params }: { params: { slug: s
                     {instructor?.photoUrl ? (
                       <Image
                         src={instructor.photoUrl}
-                        alt={`${instructor.firstName} ${instructor.lastName}`}
+                        alt={`${instructor.firstName ?? ""} ${instructor.lastName ?? ""}`.trim() || "Instructor"}
                         fill
                         className="object-cover"
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center bg-blue-500 text-xl font-semibold text-white">
-                        {instructor ? `${instructor.firstName[0]}${instructor.lastName[0]}` : "TBA"}
+                        {instructor ? `${instructor.firstName?.[0] ?? ""}${instructor.lastName?.[0] ?? ""}` || "TBA" : "TBA"}
                       </div>
                     )}
                   </div>
                   <div>
-                    <p className="text-xl font-semibold text-gray-900">{instructor ? `${instructor.firstName} ${instructor.lastName}` : "TBA"}</p>
+                    <p className="text-xl font-semibold text-gray-900">{instructor ? `${instructor.firstName ?? ""} ${instructor.lastName ?? ""}`.trim() || "TBA" : "TBA"}</p>
                     <p className="text-sm text-gray-600">{program.teacher?.specialization || "Program Lead"}</p>
                   </div>
                 </div>

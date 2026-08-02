@@ -44,7 +44,8 @@ export default function HomePage() {
         const response = await fetch("/api/testimonies");
         if (!response.ok) throw new Error("Unable to load testimonials");
         const data = await response.json();
-        setGeneralTestimonials(data.filter((item: any) => item.program === "General"));
+        const generalOnly = data.filter((item: any) => item.program === "General");
+        setGeneralTestimonials(generalOnly.length > 0 ? generalOnly : data);
       } catch (error) {
         console.error("Failed to fetch general testimonials:", error);
       } finally {
@@ -62,20 +63,20 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
-      <section className="relative overflow-hidden bg-slate-950 text-white py-28 px-4">
-        <div className="absolute inset-0 opacity-50 bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.35),_transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.16),_transparent_30%)]" />
+      <section className="relative overflow-hidden bg-white text-slate-950 py-24 px-4">
+        <div className="absolute inset-x-0 bottom-0 h-px bg-slate-200" />
         <div className="relative max-w-6xl mx-auto text-center">
           <h1 className="text-4xl md:text-6xl font-semibold tracking-tight mb-6 leading-snug">
-            Shape your future with <span className="text-sky-300">purposeful learning</span>.
+            Shape your future with <span className="text-slate-900">purposeful learning</span>.
           </h1>
-          <p className="text-xl text-slate-200 mb-10 max-w-2xl mx-auto">
+          <p className="text-xl text-slate-600 mb-10 max-w-2xl mx-auto">
             Join thousands of students building successful careers through accredited programs, expert faculty, and modern campus systems.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-yellow-400 text-blue-900 hover:bg-yellow-300 font-bold text-lg px-8" asChild>
+            <Button size="lg" className="bg-slate-950 text-white hover:bg-slate-800 font-bold text-lg px-8" asChild>
               <Link href="/enroll">Apply Now <ArrowRight className="ml-2 h-5 w-5" /></Link>
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-900 font-bold text-lg px-8" asChild>
+            <Button size="lg" variant="outline" className="border-slate-300 text-slate-900 hover:bg-slate-100 font-bold text-lg px-8" asChild>
               <Link href="/programs">Explore Programs</Link>
             </Button>
           </div>
@@ -95,9 +96,9 @@ export default function HomePage() {
                   >
                     <h3 className="text-lg font-semibold text-gray-900 pr-4">{faq.question}</h3>
                     {openFaq === index ? (
-                      <Minus className="h-5 w-5 text-gray-500 flex-shrink-0" />
+                      <Minus className="h-5 w-5 text-slate-500 flex-shrink-0" />
                     ) : (
-                      <Plus className="h-5 w-5 text-gray-500 flex-shrink-0" />
+                      <Plus className="h-5 w-5 text-slate-500 flex-shrink-0" />
                     )}
                   </button>
                   {openFaq === index && (
@@ -119,9 +120,12 @@ export default function HomePage() {
               <p className="text-sm uppercase tracking-[0.24em] text-sky-500">General Testimonials</p>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900">What our community says about us</h2>
             </div>
-            <p className="text-sm text-gray-500 max-w-xl">
-              Approved general testimonies appear here to help visitors understand the real student and teacher experience.
-            </p>
+            <div className="space-y-3 md:text-right">
+              <p className="text-sm text-slate-500 max-w-xl">
+                Approved testimonies appear here to help visitors understand the real student and teacher experience.
+              </p>
+              <Button variant="outline" asChild><Link href="/testimonies">See All Testimonies</Link></Button>
+            </div>
           </div>
 
           {loadingTestimonials ? (
@@ -129,7 +133,7 @@ export default function HomePage() {
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
             </div>
           ) : generalTestimonials.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">
+            <div className="text-center py-12 text-slate-500">
               No general testimonials are available yet. Check back soon.
             </div>
           ) : (
@@ -143,7 +147,7 @@ export default function HomePage() {
                       </div>
                       <div>
                         <p className="font-semibold text-gray-900">{testimonial.name}</p>
-                        <p className="text-sm text-gray-500">{testimonial.program === "General" ? "General testimony" : testimonial.program}</p>
+                        <p className="text-sm text-slate-500">{testimonial.program === "General" ? "General testimony" : testimonial.program}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-1 mb-4 text-yellow-500">
@@ -160,31 +164,31 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-16 px-4 bg-gradient-to-r from-blue-700 to-blue-900 text-white text-center">
+      <section className="py-16 px-4 bg-white text-slate-950 border-y border-slate-200 text-center">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Begin Your Journey?</h2>
-          <p className="text-blue-100 text-lg mb-8">Apply today and take the first step toward a bright future.</p>
+          <p className="text-slate-600 text-lg mb-8">Apply today and take the first step toward a bright future.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-yellow-400 text-blue-900 hover:bg-yellow-300 font-bold" asChild><Link href="/enroll">Apply Now</Link></Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-900" asChild><Link href="/contact">Contact Us</Link></Button>
+            <Button size="lg" className="bg-slate-950 text-white hover:bg-slate-800 font-bold" asChild><Link href="/enroll">Apply Now</Link></Button>
+            <Button size="lg" variant="outline" className="border-slate-300 text-slate-900 hover:bg-slate-100" asChild><Link href="/contact">Contact Us</Link></Button>
           </div>
         </div>
       </section>
 
-      <footer className="bg-gray-900 text-gray-300 py-10 px-4">
+      <footer className="bg-white text-slate-600 border-t border-slate-200 py-10 px-4">
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
           <div>
-            <div className="flex items-center gap-2 text-white font-bold text-xl mb-4"><GraduationCap className="h-6 w-6" />EduManage</div>
-            <p className="text-sm text-gray-400">Empowering students with quality education since 2005.</p>
+            <div className="flex items-center gap-2 text-slate-900 font-bold text-xl mb-4"><GraduationCap className="h-6 w-6" />EduManage</div>
+            <p className="text-sm text-slate-500">Empowering students with quality education since 2005.</p>
           </div>
           <div>
-            <h4 className="font-semibold text-white mb-3">Quick Links</h4>
+            <h4 className="font-semibold text-slate-900 mb-3">Quick Links</h4>
             {["Programs", "Services", "About Us", "Contact"].map((l) => (
-              <Link key={l} href={`/${l.toLowerCase().replace(" ", "-")}`} className="block text-sm hover:text-white mb-1">{l}</Link>
+              <Link key={l} href={`/${l.toLowerCase().replace(" ", "-")}`} className="block text-sm hover:text-slate-900 mb-1">{l}</Link>
             ))}
           </div>
           <div>
-            <h4 className="font-semibold text-white mb-3">Contact</h4>
+            <h4 className="font-semibold text-slate-900 mb-3">Contact</h4>
             <div className="space-y-2 text-sm">
               <div className="flex items-center gap-2"><MapPin className="h-4 w-4" /> Bamenda, NW Region, Cameroon</div>
               <div className="flex items-center gap-2"><Phone className="h-4 w-4" /> +237 677 000 111</div>
@@ -192,7 +196,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-        <div className="border-t border-gray-700 mt-8 pt-6 text-center text-sm text-gray-500">
+        <div className="border-t border-slate-200 mt-8 pt-6 text-center text-sm text-slate-500">
           © {new Date().getFullYear()} EduManage. All rights reserved.
         </div>
       </footer>

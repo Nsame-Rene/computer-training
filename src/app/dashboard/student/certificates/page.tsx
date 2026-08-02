@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Award, Download, Eye, Loader2 } from "lucide-react";
+import { Award, Download, Eye, Loader2, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface Certificate {
@@ -25,6 +25,7 @@ export default function CertificatesPage() {
   const [previewLoading, setPreviewLoading] = useState(false);
   const [previewContent, setPreviewContent] = useState<string>("");
   const [downloadingId, setDownloadingId] = useState<number | null>(null);
+  const [requesting, setRequesting] = useState(false);
 
   useEffect(() => {
     fetchCertificates();
@@ -95,6 +96,29 @@ export default function CertificatesPage() {
     }
   }
 
+  async function requestCertificate() {
+    try {
+      setRequesting(true);
+      const res = await fetch("/api/certificates", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: "Certificate of Completion Request" }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to request certificate");
+      }
+
+      toast({ title: "Certificate request sent to the CEO dashboard" });
+      fetchCertificates();
+    } catch (error) {
+      console.error("Error requesting certificate:", error);
+      toast({ title: "Failed to request certificate", variant: "destructive" });
+    } finally {
+      setRequesting(false);
+    }
+  }
+
   if (loading) {
     return (
       <div className="p-6 space-y-5">
@@ -110,7 +134,7 @@ export default function CertificatesPage() {
     <div className="p-6 space-y-5">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">My Certificates</h1>
-        <Badge variant="secondary">{certificates.length} certificates</Badge>
+        <div className="flex items-center gap-3"><Badge variant="secondary">{certificates.length} certificates</Badge><Button onClick={requestCertificate} disabled={requesting}>{requesting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}Request Certificate</Button></div>
       </div>
 
       {certificates.length === 0 ? (

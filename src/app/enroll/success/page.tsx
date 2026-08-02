@@ -160,7 +160,7 @@ function SuccessPageContent({
               </div>
               <div>
                 <p><strong>{enrollment.firstName} {enrollment.lastName}</strong></p>
-                <p>{enrollment.address || "Address not provided"}</p>
+                <p>{(enrollment as { address?: string }).address || "Address not provided"}</p>
                 <p>Buea, Cameroon</p>
               </div>
               <div className="text-center font-bold text-base text-blue-900 border-t border-b py-2 my-2">
@@ -179,7 +179,7 @@ function SuccessPageContent({
                   <p className="font-semibold text-blue-900 text-sm mb-2">ADMISSION DETAILS</p>
                   <p className="text-xs">Matriculation Number: <strong>{enrollment.matricle}</strong></p>
                   <p className="text-xs">Program: <strong>{enrollment.program}</strong></p>
-                  <p className="text-xs">Enrollment Date: <strong>{new Date(enrollment.createdAt).toLocaleDateString()}</strong></p>
+                  <p className="text-xs">Enrollment Date: <strong>{(enrollment as { createdAt?: string }).createdAt ? new Date((enrollment as unknown as { createdAt: string }).createdAt).toLocaleDateString() : "Pending"}</strong></p>
                   <p className="text-xs">Admission Date: <strong>{new Date(enrollment.approvedAt!).toLocaleDateString()}</strong></p>
                 </div>
                 <p className="mt-2 font-semibold text-blue-900">Thank You for Choosing EduManage</p>
