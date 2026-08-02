@@ -15,25 +15,33 @@ export default function BlogPage() {
           <h1 className="text-4xl font-semibold tracking-tight text-slate-950">Simple computer training insights</h1>
           <p className="mx-auto mt-3 max-w-2xl text-slate-600">Short, useful posts students can read and share.</p>
         </div>
-        <div className="grid gap-6 md:grid-cols-2">
-          {blogPosts.map((post) => (
-            <Card key={post.slug} className="border-slate-200 shadow-sm">
-              <CardHeader>
-                <CardTitle>{post.title}</CardTitle>
-                <p className="text-sm text-slate-500">{post.date}</p>
-              </CardHeader>
-              <CardContent className="space-y-5">
-                <p className="text-slate-600">{post.excerpt}</p>
-                <div className="flex flex-wrap gap-3">
-                  <Button asChild><Link href={`/blog/${post.slug}`}>Read More</Link></Button>
-                  <Button variant="outline" asChild>
-                    <a href={`https://www.facebook.com/sharer/sharer.php?u=/blog/${post.slug}`} target="_blank" rel="noreferrer"><Share2 className="mr-2 h-4 w-4" /> Share</a>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        {blogPosts.length === 0 ? (
+          <Card className="border-slate-200 shadow-sm">
+            <CardContent className="p-10 text-center text-slate-500">
+              No blog posts have been published yet.
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2">
+            {blogPosts.map((post) => (
+              <Card key={post.slug} className="border-slate-200 shadow-sm">
+                <CardHeader>
+                  <CardTitle>{post.title}</CardTitle>
+                  <p className="text-sm text-slate-500">{post.date}</p>
+                </CardHeader>
+                <CardContent className="space-y-5">
+                  <p className="text-slate-600">{post.excerpt}</p>
+                  <div className="flex flex-wrap gap-3">
+                    <Button asChild><Link href={`/blog/${post.slug}`}>Read More</Link></Button>
+                    <Button variant="outline" asChild>
+                      <a href={`https://www.facebook.com/sharer/sharer.php?u=/blog/${post.slug}`} target="_blank" rel="noreferrer"><Share2 className="mr-2 h-4 w-4" /> Share</a>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );
